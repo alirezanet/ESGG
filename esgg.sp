@@ -442,6 +442,6 @@ public Plugin myinfo =
 	name = "ESGG",
 	author = "AliReZa Sabouri",
 	description = "OpenSource Matchmaking plugin",
-	version = "1.2",
+	version = "0.1.2-beta",
 	url = "https://github.com/Alirezanet/es-gg"
 };
