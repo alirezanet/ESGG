@@ -70,7 +70,7 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 			g_hRegistredPlayers.Rewind();
 			if (!g_hRegistredPlayers.GotoFirstSubKey())
 				return;
-	 
+
 			char buffer[255];
 			do
 			{
@@ -234,7 +234,7 @@ public Action:Command_JoinTeam(client, const String:command[], args)
     {
 		if ( GetClientTeam(client) > 1) // when client is in game
         {
-        	PrintToChat(client, " \x04[ES-GG] \x07You cannot change your team during a match!");
+			PrintToChat(client, " \x04[ES-GG] \x07You cannot change your team during a match!");
             return Plugin_Stop;
         }
 		else
@@ -441,7 +441,7 @@ public Plugin myinfo =
 {
 	name = "ESGG",
 	author = "AliReZa Sabouri",
-	description = "Plugin for using esgg website",
+	description = "OpenSource Matchmaking plugin",
 	version = "1.2",
-	url = "http://www.es-gg.com/"
+	url = "https://github.com/Alirezanet/es-gg"
 };
