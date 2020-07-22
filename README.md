@@ -1,2 +1,2 @@
 # es-gg
-Auto Match Making source-mod plugin for Counter Strike Global offensive,
+Auto Match Making Sourcemod plugin for Counter-Strike Global offensive similar to ESEA and FACEIT.
