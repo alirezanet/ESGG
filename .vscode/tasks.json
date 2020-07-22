@@ -1,0 +1,28 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "0.1.0",
+  "isShellCommand": true,
+  "command": "powershell",
+  "args": [
+    "-Command"
+  ],
+  "showOutput": "always",
+  "suppressTaskName": true,
+  "tasks": [
+    {
+      "taskName": "build",
+      "isBuildCommand": true,
+      "args": [
+        "Start-Process -Wait -NoNewWindow -PassThru -FilePath '${workspaceRoot}\\spcomp.exe'-ArgumentList '\"${file}\" \"-o${workspaceRoot}\\compiled\\esgg.smx\"'"
+      ]
+    },
+    {
+      "taskName": "Copy Esgg To Server",
+      "isTestCommand": true,
+      "args": [
+        "Copy-Item -Path \"${workspaceRoot}\\compiled\\esgg.smx\" -Destination \"D:\\DedicatedServers\\cs_go\\csgo\\addons\\sourcemod\\plugins\" -Recurse -force -PassThru"
+      ]
+    }
+  ]
+}

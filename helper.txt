@@ -1,0 +1,119 @@
+\\Chat Colors
+"none", "Default");
+"\x02", "Strong Red");
+"\x03", "Team Color");
+"\x04", "Green");
+"\x05", "Turquoise");
+"\x06", "Yellow-Green");
+"\x07", "Light Red");
+"\x08", "Gray");
+"\x09", "Light Yellow");
+"\x0A", "Light Blue");
+"\x0C", "Purple");
+"\x0E", "Pink");
+"\x10", "Orange");
+
+bool SplitStringRight( const String:source[], const String:split[], String:part[], partLen )  
+{  
+    new index = StrContains( source, split ); // get start index of split string  
+      
+    if( index == -1 ) // split string not found..  
+        return false;  
+      
+    index += strlen( split ); // get end index of split string 
+
+    if( index == strlen( source ) - 1 ) // no right side exist 
+        return false; 
+  
+    strcopy( part, partLen, source[ index ] ); // copy everything after source[ index ] to part  
+    return true;  
+}  
+
+
+//Welcome Message
+void showWelcomeMsg(client)
+{
+	char name[99];
+	GetClientName(client,name,sizeof(name));
+	PrintToChat(client,"\x04[ESGG]\x02%s \x01Welcome.",name);
+	LogMessage("player joined %s",name);
+}
+
+#define CS_TEAM_NONE		0	/**< No team yet. */
+#define CS_TEAM_SPECTATOR	1	/**< Spectators. */
+#define CS_TEAM_T 			2	/**< Terrorists. */
+#define CS_TEAM_CT			3	/**< Counter-Terrorists. */
+
+public Action Event_Player_Team(Event event, const char[] name, bool dontBroadcast)
+{
+	int client = GetClientOfUserId(event.GetInt("userid")); // ranslates an userid index to the real player index.
+	if( IsFakeClient(client) )
+		return Plugin_Continue;
+
+	char authId[25];
+	GetClientAuthId (client,AuthId_Engine,authId,sizeof(authId));
+	int playerIndex;
+	GetTrieValue(g_hWhitelistSteamIdTrie, authId, playerIndex ); // find player team
+	
+	LogMessage("sid : %s PI : %d",authId,playerIndex);
+	// if(playerIndex > 0 && playerIndex <= 5) //ct
+	// {
+	// 	event.SetInt("team",1);
+	// }
+	// else if(playerIndex > 5 && playerIndex <= 10)
+	// {
+	// 	event.SetInt("team",2);
+	// }
+	// LogMessage("team %d",event.GetInt("team"));	
+	return Plugin_Continue;
+}
+
+public Action:Command_Join(client, const String:command[], argc) 
+{ 
+    char sJoining[8]; 
+    GetCmdArg(1, sJoining, sizeof(sJoining)); 
+    int iJoining = StringToInt(sJoining); 
+    if(iJoining == CS_TEAM_SPECTATOR) 
+        return Plugin_Handled; 
+
+	char authId[25];
+	GetClientAuthId (client,AuthId_Engine,authId,sizeof(authId));
+	int playerIndex;
+	GetTrieValue(g_hWhitelistSteamIdTrie, authId, playerIndex ); // find player team
+
+    new iTeam = GetClientTeam(client);
+    if(playerIndex > 0 && playerIndex <= 5) //ct
+	{
+		if(iTeam != CS_TEAM_CT)
+			return Plugin_Handled;
+	}
+	else if(playerIndex > 5 && playerIndex <= 10)
+	{
+		if(iTeam != CS_TEAM_T)
+			return Plugin_Handled;
+	}
+
+	return Plugin_Continue;
+}
+
+
+Format Specifiers
+A format specifier is a code that allows you to specify what data-type to print. The most common specifiers are:
+Numerical
+d or i: Integer number as decimal
+u: Unsigned integer number as decimal
+b: Binary digits in the value
+f: Floating-point number
+x or X: Hexadecimal representation of the binary value (capitalization affects hex letter casing)
+Character(s)
+s: String
+t or T: Translates a phrase (explained in Translations)
+c: Prints one character (UTF-8 compliant)
+Special
+L: Requires a client index; expands to 1<2><3><> where 1 is the player's name, 2 is the player's userid, and 3 is the player's Steam ID. If the client index is 0, the string will be: Console<0><Console><Console>
+N: Requires a client index; expands to a string containing the player's name. If the client index is 0, the string will be: Console
+
+
+public void OnPluginEnd()
+{
+}
